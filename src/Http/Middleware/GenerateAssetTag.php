@@ -15,12 +15,16 @@ class GenerateAssetTag
     {
         if (!$request->has('asset_tag') && $request->has('company_id')) {
 
-            $asset_tag_pattern = config('deel-it.pattern');
+            $asset_tag_pattern = config('deel-it.pattern', 'CC-YY-000');
             $digitsCount = strspn($asset_tag_pattern, '0', strpos($asset_tag_pattern, "0"));
             if (str_contains($asset_tag_pattern, self::COMPANY_TOKEN) ) {
-                $companyAbbreviations = config('deel-it.company_abbrev');
-                $companyAbbreviation = $companyAbbreviations[$request->get('company_id')];
-                $asset_tag_pattern = str_replace(self::COMPANY_TOKEN, $companyAbbreviation, $asset_tag_pattern);
+                $companyAbbreviations = config('deel-it.company_abbrev', array());
+                if (is_array($companyAbbreviations)) {
+                    $companyAbbreviation = $companyAbbreviations[$request->get('company_id')];
+                }
+                if (isset($companyAbbreviation)) {
+                    $asset_tag_pattern = str_replace(self::COMPANY_TOKEN, $companyAbbreviation, $asset_tag_pattern);
+                }
             }
             if (str_contains($asset_tag_pattern, self::YEAR_4_TOKEN) ) {
                 $asset_tag_pattern = str_replace(self::YEAR_4_TOKEN, date('Y'), $asset_tag_pattern);
