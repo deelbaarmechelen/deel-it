@@ -12,7 +12,12 @@ class TestCase extends \Orchestra\Testbench\TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         // additional setup
+        // Register the model factories
+        $this->app->make('Illuminate\Database\Eloquent\Factory')
+            ->load(__DIR__ . '/../database/factories');
+
         Asset::observe(AssetObserver::class);
     }
 
