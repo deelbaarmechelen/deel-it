@@ -4,7 +4,6 @@ namespace Deelbaarmechelen\DeelIt;
 
 use Deelbaarmechelen\DeelIt\Http\Middleware\GenerateAssetTag;
 use Deelbaarmechelen\DeelIt\Observers\AssetObserver;
-use Deelbaarmechelen\DeelIt\Tests\Snipe\Models\Asset;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -62,12 +61,16 @@ class DeelItServiceProvider extends ServiceProvider
             // Disabling, requires Faker/Factory class which is only available in dev mode
             //$this->app->make('Illuminate\Database\Eloquent\Factory')
             //    ->load(__DIR__ . '/../database/factories');
+        }
 
-            // Register observers
-            $className = 'App\\Models\\Asset';
-            if (class_exists ($className)) {
-                $className::observe(AssetObserver::class);
-            }
+        // Register observers
+        $className = 'App\\Models\\Asset';
+        if (class_exists ($className)) {
+            \Log::debug($className . " exists -> registering observer for update of sequence numbers");
+            //\App\Models\Asset::observe(AssetObserver::class);
+            $className::observe(AssetObserver::class);
+        } else {
+            \Log::error($className . " does not exist -> no observer could be attached, sequence numbers won't be updated !!!");
         }
 
     }

@@ -18,6 +18,8 @@ class AssetObserver
      */
     public function created(Model $asset)
     {
+        \Log::debug("created event fired for model: updating next_auto_id");
+
         if (!isset($asset->asset_tag)) { // not an asset
             return;
         }
