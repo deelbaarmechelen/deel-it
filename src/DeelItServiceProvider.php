@@ -59,8 +59,9 @@ class DeelItServiceProvider extends ServiceProvider
             }
 
             // Register the model factories
-            $this->app->make('Illuminate\Database\Eloquent\Factory')
-                ->load(__DIR__ . '/../database/factories');
+            // Disabling, requires Faker/Factory class which is only available in dev mode
+            //$this->app->make('Illuminate\Database\Eloquent\Factory')
+            //    ->load(__DIR__ . '/../database/factories');
 
             // Register observers
             $className = 'App\\Models\\Asset';
